@@ -1,0 +1,315 @@
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+
+
+
+
+    /* Hero Section */
+    .hero {
+        text-align: center;
+        margin-bottom: 80px;
+        padding: 40px 20px;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 25px;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        color: #cbd5e1;
+        max-width: 900px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .hero strong {
+        color: #60a5fa;
+        font-weight: 600;
+    }
+
+    .dataset-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+
+    /* Objective & Tools Grid */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 30px;
+        margin-bottom: 80px;
+    }
+
+    .content-card {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 24px;
+        padding: 40px;
+        transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(96, 165, 250, 0.4);
+        box-shadow: 0 20px 40px rgba(96, 165, 250, 0.15);
+    }
+
+    .content-card h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .icon {
+        font-size: 2rem;
+    }
+
+    .content-card p {
+        color: #cbd5e1;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+    .content-card ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .content-card ul li {
+        color: #cbd5e1;
+        padding: 12px 0;
+        padding-left: 30px;
+        position: relative;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+    }
+
+    .content-card ul li:hover {
+        color: #60a5fa;
+        padding-left: 35px;
+    }
+
+    .content-card ul li::before {
+        content: '▹';
+        position: absolute;
+        left: 0;
+        color: #60a5fa;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    /* Goals Section */
+    .goals-section {
+        margin-bottom: 80px;
+    }
+
+    .goals-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .goals-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .goal-card {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 16px;
+        padding: 30px;
+        transition: all 0.3s ease;
+        display: flex;
+        gap: 20px;
+    }
+
+    .goal-card:hover {
+        border-color: rgba(96, 165, 250, 0.5);
+        box-shadow: 0 10px 30px rgba(96, 165, 250, 0.1);
+        transform: translateX(5px);
+    }
+
+    .goal-icon {
+        font-size: 2.5rem;
+        min-width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+        border-radius: 12px;
+    }
+
+    .goal-content p {
+        color: #cbd5e1;
+        line-height: 1.7;
+        font-size: 1.02rem;
+    }
+
+    /* Team Section */
+    .team-section {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .team-title {
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin-bottom: 60px;
+    }
+
+    .team-card {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 20px;
+        padding: 35px 25px;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .team-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(96, 165, 250, 0.5);
+        box-shadow: 0 20px 40px rgba(96, 165, 250, 0.2);
+    }
+
+    .team-avatar {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        border: 3px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .team-card h3 {
+        font-size: 1.4rem;
+        color: #60a5fa;
+        margin-bottom: 8px;
+    }
+
+    .team-card .roll {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .team-card .role {
+        color: #a78bfa;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 15px;
+        font-style: italic;
+    }
+
+    .team-card .description {
+        color: #cbd5e1;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* Supervisor Section */
+    .supervisor-section {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        border: 2px solid rgba(96, 165, 250, 0.3);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .supervisor-section h3 {
+        font-size: 1.8rem;
+        color: #60a5fa;
+        margin-bottom: 15px;
+    }
+
+    .supervisor-section p {
+        color: #cbd5e1;
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .team-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .goals-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+        }
+
+        .team-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .content-card,
+        .goal-card {
+            padding: 25px;
+        }
+    }
+

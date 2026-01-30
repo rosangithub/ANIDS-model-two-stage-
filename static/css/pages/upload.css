@@ -1,0 +1,216 @@
+/* =========================================
+   Upload Page CSS
+   Scoped ONLY to .upload-page
+   Does NOT touch base.html styles
+========================================= */
+
+/* Page wrapper (inside <main>) */
+.upload-page {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  color: #e2e8f0;
+  width: 100%;
+}
+
+/* Inner container */
+.upload-page .upload-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.upload-page .upload-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.upload-page .upload-header h1 {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.upload-page .upload-subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  font-weight: 300;
+}
+
+/* Error */
+.upload-page .upload-error {
+  background: linear-gradient(135deg, rgba(239,68,68,.2), rgba(220,38,38,.28));
+  border: 1px solid rgba(239,68,68,.5);
+  color: #fca5a5;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 28px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Main grid */
+.upload-page .upload-main {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 28px;
+  margin-bottom: 38px;
+}
+
+/* Upload card */
+.upload-page .upload-form-card {
+  background: linear-gradient(135deg, rgba(30,41,59,.85), rgba(15,23,42,.92));
+  backdrop-filter: blur(10px);
+  border: 2px dashed rgba(96,165,250,.32);
+  border-radius: 20px;
+  padding: 46px 38px;
+  text-align: center;
+  min-height: 380px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.upload-page .upload-form-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(96,165,250,.6);
+  box-shadow: 0 0 42px rgba(96,165,250,.18);
+}
+
+.upload-page .upload-icon {
+  font-size: 3.6rem;
+  margin-bottom: 18px;
+}
+
+/* Form */
+.upload-page .upload-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.upload-page .upload-form input[type="file"] {
+  padding: 18px 20px;
+  background: rgba(30,41,59,.6);
+  border: 2px solid rgba(148,163,184,.28);
+  border-radius: 12px;
+  color: #e2e8f0;
+  width: 100%;
+  max-width: 440px;
+}
+
+.upload-page .upload-form input[type="file"]::file-selector-button {
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  margin-right: 14px;
+}
+
+/* Buttons */
+.upload-page .upload-btn {
+  padding: 14px 34px;
+  font-size: 1.02rem;
+  font-weight: 900;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #fff;
+}
+
+/* Stats */
+.upload-page .upload-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.upload-page .upload-stat-card {
+  background: linear-gradient(135deg, rgba(30,41,59,.82), rgba(15,23,42,.92));
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Results */
+.upload-page .upload-result {
+  background: linear-gradient(135deg, rgba(30,41,59,.82), rgba(15,23,42,.92));
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 34px;
+  overflow-x: auto;
+}
+
+/* Table */
+.upload-page .upload-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 520px;
+}
+
+.upload-page .upload-table th,
+.upload-page .upload-table td {
+  padding: 14px 16px;
+  color: #e2e8f0;
+  border-bottom: 1px solid rgba(148,163,184,.12);
+}
+
+/* Charts */
+.upload-page .upload-charts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px;
+  margin-bottom: 34px;
+}
+
+.upload-page .upload-chart-card {
+  background: linear-gradient(135deg, rgba(30,41,59,.82), rgba(15,23,42,.92));
+  border-radius: 20px;
+  padding: 26px;
+}
+
+.upload-page .upload-chart-card canvas {
+  width: 100% !important;
+  height: 320px !important;
+}
+
+.upload-page .upload-chart-card img {
+  width: 100%;
+  border-radius: 14px;
+}
+
+/* Actions */
+.upload-page .upload-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .upload-page .upload-main { grid-template-columns: 1fr; }
+  .upload-page .upload-charts { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .upload-page .upload-container { padding: 14px; }
+  .upload-page .upload-header h1 { font-size: 2rem; }
+  .upload-page .upload-form-card { padding: 28px 18px; }
+}

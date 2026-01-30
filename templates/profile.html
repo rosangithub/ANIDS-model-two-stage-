@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Profile | ANIDS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+  <div class="profile-shell">
+
+    <!-- Header card -->
+    <div class="profile-card">
+      <div class="profile-card-top">
+        <div class="profile-user">
+          <div class="avatar">
+            {{ (user.name[:1] if user and user.name else "U")|upper }}
+          </div>
+
+          <div class="profile-user-meta">
+            <h2 class="profile-name">{{ user.name }}</h2>
+            <p class="profile-email">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <a href="/logout" class="btn btn-danger">Logout</a>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category|lower }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Stats -->
+      <div class="profile-stats">
+        <div class="stat-card stat-blue">
+          <div class="stat-label">Total Uploads</div>
+          <div class="stat-value">{{ total_uploads }}</div>
+        </div>
+
+        <div class="stat-card stat-green">
+          <div class="stat-label">Total Predictions</div>
+          <div class="stat-value">{{ total_predictions }}</div>
+        </div>
+
+        <div class="stat-card stat-red">
+          <div class="stat-label">Detected Attacks</div>
+          <div class="stat-value">{{ total_attacks }}</div>
+        </div>
+      </div>
+
+      <!-- Change password -->
+      <div class="profile-section">
+        <div class="section-head">
+          <h3>Change Password</h3>
+          <p>Use a strong password (8+ chars, upper/lower, number, symbol).</p>
+        </div>
+
+        <form method="POST" action="/profile" class="profile-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="old_password">Old Password</label>
+              <input type="password" name="old_password" id="old_password" required placeholder="Enter old password">
+            </div>
+
+            <div class="field">
+              <label for="new_password">New Password</label>
+              <input type="password" name="new_password" id="new_password" required placeholder="Enter new password">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

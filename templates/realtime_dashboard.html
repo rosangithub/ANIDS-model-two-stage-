@@ -1,0 +1,600 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>ANIDS | Realtime Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/realtime_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="rt-dashboard">
+  <div class="wrap">
+
+    <div class="header">
+      <div>
+        <p class="title">Real-Time ANIDS Dashboard</p>
+        <p class="subtitle">Live packets + flow predictions + captured attack flows</p>
+        <div class="mini-status">
+          Alerts: <span id="alertCount">0</span> • Last alert: <span id="lastAlert">—</span>
+        </div>
+      </div>
+
+      <div class="pill">
+        <span id="dot" class="dot"></span>
+        <span id="conn">Connected</span>
+        <span id="counts"></span>
+      </div>
+    </div>
+
+    <div class="alertbar" id="alertBar">
+      <div id="alertMsg"></div>
+      <small>Attack alert • auto hides • rate-limited</small>
+    </div>
+
+    <div class="grid">
+      <div class="split">
+
+        <!-- ✅ LEFT TOP: PACKETS + SECONDARY FEATURE TABLE -->
+        <div class="card packet-card">
+          <div class="card-h">
+            <h3>Live Packet Capture</h3>
+            <div class="controls">
+              <button class="btn" id="pausePkts">Pause</button>
+              <button class="btn btn-danger" id="clearPkts">Clear</button>
+            </div>
+          </div>
+
+          <div class="card-b">
+
+            <!-- Packets table -->
+            <div class="table-wrap packets">
+              <div class="table-x">
+                <div class="table-y">
+                  <table class="stream" id="pktTable">
+                    <thead>
+                      <tr>
+                        <th class="col-time">Time</th>
+                        <th class="col-src">Src</th>
+                        <th class="col-dst">Dst</th>
+                        <th class="col-proto">Proto</th>
+                        <th class="col-sport">Sport</th>
+                        <th class="col-dport">Dport</th>
+                        <th class="col-len">Len</th>
+                        <th class="col-flag">Flags</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pktBody">
+                      {% for p in init_pkts %}
+                      <tr>
+                        <td class="col-time mono">{{ p.ts }}</td>
+                        <td class="col-src mono" title="{{ p.src }}">{{ p.src }}</td>
+                        <td class="col-dst mono" title="{{ p.dst }}">{{ p.dst }}</td>
+                        <td class="col-proto">{{ p.proto }}</td>
+                        <td class="col-sport mono">{{ p.sport }}</td>
+                        <td class="col-dport mono">{{ p.dport }}</td>
+                        <td class="col-len mono">{{ p.len }}</td>
+                        <td class="col-flag mono" title="{{ p.flags }}">{{ p.flags }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <hr style="border:0; border-top:1px solid rgba(148,163,184,.18); margin:14px 0;">
+
+            <!-- ✅ Secondary dashboard (ONLY 20 features) -->
+            <div class="card-h" style="padding:0 0 10px 0; align-items:center;">
+              <h3 style="margin:0;">Secondary: Flow 20-Feature Table (Model Input)</h3>
+
+              <div class="controls" style="gap:10px; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="showFeatTable" style="width:18px;height:18px;">
+                  <label for="showFeatTable" style="cursor:pointer;">Show 20-feature table</label>
+                </div>
+
+                <button class="btn" id="downloadFeatCsv" disabled>Download CSV</button>
+                <button class="btn btn-danger" id="clearFeatTable" disabled>Clear</button>
+              </div>
+            </div>
+
+            <div id="featTableWrap" style="display:none; margin-top:10px;">
+              <div class="table-wrap flows">
+                <div class="table-x">
+                  <div class="table-y">
+                    <table class="stream" id="featTable">
+                      <thead>
+                        <tr id="featHeadRow"></tr>
+                      </thead>
+                      <tbody id="featBodyTable"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <p class="hint">
+                This table logs each expired flow and shows ONLY the 20 features (same order as model training).
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ✅ LEFT BOTTOM: FLOWS + ATTACK FLOWS -->
+        <div class="card flow-card">
+          <div class="card-h">
+            <h3>Live Flow Predictions</h3>
+            <div class="controls">
+              <label class="toggle"><input type="checkbox" id="onlyAttacks"> Only attacks</label>
+              <label class="toggle"><input type="checkbox" id="soundAlerts" checked> Sound</label>
+              <button class="btn" id="pauseFlows">Pause</button>
+              <button class="btn btn-danger" id="clearFlows">Clear</button>
+            </div>
+          </div>
+
+          <div class="card-b">
+
+            <!-- Live flows -->
+            <div class="table-wrap flows">
+              <div class="table-x">
+                <div class="table-y">
+                  <table class="stream" id="flowTable">
+                    <thead>
+                      <tr>
+                        <th class="col-time">Time</th>
+                        <th class="col-src">Src</th>
+                        <th class="col-dst">Dst</th>
+                        <th class="col-sport">Sport</th>
+                        <th class="col-dport">Dport</th>
+                        <th class="col-proto">Proto</th>
+                        <th class="col-label">Label</th>
+                        <th class="col-conf t-right">Conf</th>
+                      </tr>
+                    </thead>
+                    <tbody id="flowBody">
+                      {% for f in init_flows %}
+                      <tr data-label="{{ f.label }}">
+                        <td class="col-time mono">{{ f.ts }}</td>
+                        <td class="col-src mono" title="{{ f.src }}">{{ f.src }}</td>
+                        <td class="col-dst mono" title="{{ f.dst }}">{{ f.dst }}</td>
+                        <td class="col-sport mono">{{ f.sport }}</td>
+                        <td class="col-dport mono">{{ f.dport }}</td>
+                        <td class="col-proto">{{ f.proto }}</td>
+                        <td class="col-label">
+                          {% if f.label == "BENIGN" %}
+                            <span class="badge ok">{{ f.label }}</span>
+                          {% else %}
+                            <span class="badge bad">{{ f.label }}</span>
+                          {% endif %}
+                        </td>
+                        <td class="col-conf mono t-right">{{ f.confidence }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <hr style="border:0; border-top:1px solid rgba(148,163,184,.18); margin:14px 0;">
+
+            <!-- Attack flows -->
+            <div class="card-h" style="padding:0 0 10px 0;">
+              <h3 style="margin:0;">Captured Attack Flows</h3>
+              <div class="controls">
+                <button class="btn btn-danger" id="clearAttackFlows">Clear</button>
+              </div>
+            </div>
+
+            <div class="table-wrap flows">
+              <div class="table-x">
+                <div class="table-y">
+                  <table class="stream" id="attackFlowTable">
+                    <thead>
+                      <tr>
+                        <th class="col-time">Time</th>
+                        <th class="col-src">Src</th>
+                        <th class="col-dst">Dst</th>
+                        <th class="col-sport">Sport</th>
+                        <th class="col-dport">Dport</th>
+                        <th class="col-proto">Proto</th>
+                        <th class="col-label">Label</th>
+                        <th class="col-conf t-right">Conf</th>
+                      </tr>
+                    </thead>
+                    <tbody id="attackFlowBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ✅ RIGHT: ONLY CHARTS (NO feature inspector table) -->
+      <div class="card">
+        <div class="card-h">
+          <h3>Charts</h3>
+          <div class="controls">
+            <button class="btn" id="resetCharts">Reset charts</button>
+          </div>
+        </div>
+
+        <div class="card-b">
+          <div class="charts">
+            <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+            <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+            <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script>
+  const socket = io();
+
+  const dot = document.getElementById("dot");
+  const conn = document.getElementById("conn");
+  const counts = document.getElementById("counts");
+
+  const pktBody = document.getElementById("pktBody");
+  const flowBody = document.getElementById("flowBody");
+  const attackFlowBody = document.getElementById("attackFlowBody");
+
+  const onlyAttacks = document.getElementById("onlyAttacks");
+  const soundAlerts = document.getElementById("soundAlerts");
+  const pausePktsBtn = document.getElementById("pausePkts");
+  const clearPktsBtn = document.getElementById("clearPkts");
+  const pauseFlowsBtn = document.getElementById("pauseFlows");
+  const clearFlowsBtn = document.getElementById("clearFlows");
+  const clearAttackFlowsBtn = document.getElementById("clearAttackFlows");
+  const resetChartsBtn = document.getElementById("resetCharts");
+
+  const alertBar = document.getElementById("alertBar");
+  const alertMsg = document.getElementById("alertMsg");
+  const alertCountEl = document.getElementById("alertCount");
+  const lastAlertEl = document.getElementById("lastAlert");
+
+  let pausePkts = false;
+  let pauseFlows = false;
+
+  pausePktsBtn.onclick = () => { pausePkts = !pausePkts; pausePktsBtn.textContent = pausePkts ? "Resume" : "Pause"; };
+  pauseFlowsBtn.onclick = () => { pauseFlows = !pauseFlows; pauseFlowsBtn.textContent = pauseFlows ? "Resume" : "Pause"; };
+
+  clearPktsBtn.onclick = () => { pktBody.innerHTML = ""; };
+  clearFlowsBtn.onclick = () => { flowBody.innerHTML = ""; };
+  clearAttackFlowsBtn.onclick = () => { attackFlowBody.innerHTML = ""; };
+
+  // =========================
+  // Secondary Feature Table (ONLY 20 features)
+  // =========================
+  const featureOrder = {{ feature_order|tojson }};
+  const showFeatTable = document.getElementById("showFeatTable");
+  const featTableWrap = document.getElementById("featTableWrap");
+  const featHeadRow = document.getElementById("featHeadRow");
+  const featBodyTable = document.getElementById("featBodyTable");
+  const downloadFeatCsvBtn = document.getElementById("downloadFeatCsv");
+  const clearFeatTableBtn = document.getElementById("clearFeatTable");
+
+  const featureLogRows = [];   // array of {features:{}}
+  const MAX_FEATURE_ROWS = 300;
+
+  function fmt6(v){
+    const n = Number(v);
+    if (!Number.isFinite(n)) return "";
+    return n.toFixed(6);
+  }
+
+  function buildFeatHeader(){
+    featHeadRow.innerHTML = featureOrder.map(c => `<th class="mono">${c}</th>`).join("");
+  }
+  buildFeatHeader();
+
+  function csvEscape(x){
+    const s = String(x ?? "");
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  }
+
+  function downloadCSV(){
+    const headers = [...featureOrder];
+    const lines = [];
+    lines.push(headers.map(csvEscape).join(","));
+
+    for (const row of featureLogRows) {
+      const features = row.features || {};
+      const values = featureOrder.map(name => (name in features) ? fmt6(features[name]) : "");
+      lines.push(values.map(csvEscape).join(","));
+    }
+
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `flow_20_features_${Date.now()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function renderFeatTable(){
+    featBodyTable.innerHTML = "";
+    for (const row of featureLogRows.slice(0, MAX_FEATURE_ROWS)) {
+      const features = row.features || {};
+      const tr = document.createElement("tr");
+      tr.innerHTML = featureOrder.map(name => `<td class="mono t-right">${fmt6(features[name])}</td>`).join("");
+      featBodyTable.appendChild(tr);
+    }
+  }
+
+  function addFeaturesRowToLog(flow){
+    // expects flow.features from backend
+    if (!flow || !flow.features) return;
+
+    featureLogRows.unshift({ features: flow.features });
+    if (featureLogRows.length > MAX_FEATURE_ROWS) featureLogRows.pop();
+
+    downloadFeatCsvBtn.disabled = (featureLogRows.length === 0);
+    clearFeatTableBtn.disabled = (featureLogRows.length === 0);
+
+    if (showFeatTable.checked) renderFeatTable();
+  }
+
+  showFeatTable.onchange = () => {
+    featTableWrap.style.display = showFeatTable.checked ? "block" : "none";
+    if (showFeatTable.checked) renderFeatTable();
+  };
+
+  downloadFeatCsvBtn.onclick = downloadCSV;
+
+  clearFeatTableBtn.onclick = () => {
+    featureLogRows.length = 0;
+    featBodyTable.innerHTML = "";
+    downloadFeatCsvBtn.disabled = true;
+    clearFeatTableBtn.disabled = true;
+  };
+
+
+  // =========================
+  // Charts
+  // =========================
+  let benignCount = 0, attackCount = 0;
+  const labelCounts = new Map();
+  const minuteBuckets = [];
+  const MAX_MINUTES = 12;
+
+  function minuteLabel(){
+    const d = new Date();
+    return String(d.getHours()).padStart(2,'0') + ":" + String(d.getMinutes()).padStart(2,'0');
+  }
+  function pushMinute(isAttack){
+    const t = minuteLabel();
+    let last = minuteBuckets[minuteBuckets.length - 1];
+    if (!last || last.t !== t){
+      minuteBuckets.push({t, benign:0, attack:0});
+      if (minuteBuckets.length > MAX_MINUTES) minuteBuckets.shift();
+      last = minuteBuckets[minuteBuckets.length - 1];
+    }
+    if (isAttack) last.attack++; else last.benign++;
+  }
+  function bumpLabel(label){ labelCounts.set(label, (labelCounts.get(label) || 0) + 1); }
+  function topLabels(limit=8){
+    const arr = [...labelCounts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,limit);
+    return {labels: arr.map(x=>x[0]), values: arr.map(x=>x[1])};
+  }
+
+  function baseScales(){
+    return {
+      x: { ticks:{ color:"#94a3b8", maxRotation:0, autoSkip:true }, grid:{ color:"rgba(148,163,184,.12)" } },
+      y: { beginAtZero:true, ticks:{ color:"#94a3b8", precision:0 }, grid:{ color:"rgba(148,163,184,.12)" } }
+    };
+  }
+
+  const lineChart = new Chart(document.getElementById("lineChart"), {
+    type: "line",
+    data: { labels: [], datasets: [
+      { label: "Benign/min", data: [], tension: 0.35, pointRadius: 2 },
+      { label: "Attack/min", data: [], tension: 0.35, pointRadius: 2 }
+    ]},
+    options: { responsive:true, plugins:{ legend:{ labels:{ color:"#e5e7eb" } } }, scales: baseScales() }
+  });
+
+  const barChart = new Chart(document.getElementById("barChart"), {
+    type: "bar",
+    data: { labels: [], datasets: [{ label:"Top Labels", data: [] }] },
+    options: { responsive:true, plugins:{ legend:{ labels:{ color:"#e5e7eb" } } }, scales: baseScales() }
+  });
+
+  const pieChart = new Chart(document.getElementById("pieChart"), {
+    type: "doughnut",
+    data: { labels:["Benign","Attack"], datasets:[{ data:[0,0] }] },
+    options: { responsive:true, plugins:{ legend:{ labels:{ color:"#e5e7eb" } } } }
+  });
+
+  function refreshCharts(){
+    lineChart.data.labels = minuteBuckets.map(x=>x.t);
+    lineChart.data.datasets[0].data = minuteBuckets.map(x=>x.benign);
+    lineChart.data.datasets[1].data = minuteBuckets.map(x=>x.attack);
+    lineChart.update();
+
+    const top = topLabels(8);
+    barChart.data.labels = top.labels;
+    barChart.data.datasets[0].data = top.values;
+    barChart.update();
+
+    pieChart.data.datasets[0].data = [benignCount, attackCount];
+    pieChart.update();
+
+    counts.textContent = `Benign: ${benignCount} | Attack: ${attackCount}`;
+  }
+
+  resetChartsBtn.onclick = () => {
+    benignCount = 0; attackCount = 0;
+    labelCounts.clear();
+    minuteBuckets.length = 0;
+    refreshCharts();
+  };
+
+
+  // =========================
+  // Alerts
+  // =========================
+  let alertCount = 0;
+  let lastAlertAt = 0;
+  const ALERT_COOLDOWN_MS = 1500;
+
+  function nowHHMMSS(){
+    const d = new Date();
+    return String(d.getHours()).padStart(2,'0') + ":" +
+           String(d.getMinutes()).padStart(2,'0') + ":" +
+           String(d.getSeconds()).padStart(2,'0');
+  }
+
+  function beep(){
+    try{
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = "sine"; o.frequency.value = 880;
+      g.gain.value = 0.06;
+      o.start();
+      setTimeout(() => { o.stop(); ctx.close(); }, 130);
+    }catch(e){}
+  }
+
+  function showAlert(flow){
+    const now = Date.now();
+    if (now - lastAlertAt < ALERT_COOLDOWN_MS) return;
+    lastAlertAt = now;
+
+    alertCount++;
+    alertCountEl.textContent = String(alertCount);
+    lastAlertEl.textContent = nowHHMMSS();
+
+    alertMsg.innerHTML =
+      `🚨 Attack detected: <b>${flow.label}</b> — ` +
+      `<span class="mono">${flow.src}:${flow.sport}</span> → ` +
+      `<span class="mono">${flow.dst}:${flow.dport}</span>` +
+      ` (Conf: <b>${flow.confidence ?? "—"}</b>)`;
+
+    alertBar.style.display = "block";
+    setTimeout(() => { alertBar.style.display = "none"; }, 4500);
+
+    if (soundAlerts && soundAlerts.checked) beep();
+  }
+
+
+  // =========================
+  // Row adders
+  // =========================
+  function addPacketRow(p){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="col-time mono">${p.ts}</td>
+      <td class="col-src mono" title="${p.src}">${p.src}</td>
+      <td class="col-dst mono" title="${p.dst}">${p.dst}</td>
+      <td class="col-proto">${p.proto}</td>
+      <td class="col-sport mono">${p.sport ?? ""}</td>
+      <td class="col-dport mono">${p.dport ?? ""}</td>
+      <td class="col-len mono">${p.len}</td>
+      <td class="col-flag mono" title="${p.flags ?? ""}">${p.flags ?? ""}</td>
+    `;
+    pktBody.prepend(tr);
+    while (pktBody.children.length > 200) pktBody.removeChild(pktBody.lastChild);
+  }
+
+  function addFlowRow(f){
+    if (onlyAttacks.checked && f.label === "BENIGN") return null;
+
+    const tr = document.createElement("tr");
+    const badge = (f.label === "BENIGN")
+      ? `<span class="badge ok">BENIGN</span>`
+      : `<span class="badge bad">${f.label}</span>`;
+
+    tr.innerHTML = `
+      <td class="col-time mono">${f.ts}</td>
+      <td class="col-src mono" title="${f.src}">${f.src}</td>
+      <td class="col-dst mono" title="${f.dst}">${f.dst}</td>
+      <td class="col-sport mono">${f.sport}</td>
+      <td class="col-dport mono">${f.dport}</td>
+      <td class="col-proto">${f.proto}</td>
+      <td class="col-label">${badge}</td>
+      <td class="col-conf mono t-right">${f.confidence ?? ""}</td>
+    `;
+
+    flowBody.prepend(tr);
+    while (flowBody.children.length > 250) flowBody.removeChild(flowBody.lastChild);
+    return tr;
+  }
+
+  function addAttackFlowRow(f){
+    const tr = document.createElement("tr");
+    tr.classList.add("row-attack");
+
+    tr.innerHTML = `
+      <td class="col-time mono">${f.ts}</td>
+      <td class="col-src mono" title="${f.src}">${f.src}</td>
+      <td class="col-dst mono" title="${f.dst}">${f.dst}</td>
+      <td class="col-sport mono">${f.sport}</td>
+      <td class="col-dport mono">${f.dport}</td>
+      <td class="col-proto">${f.proto}</td>
+      <td class="col-label"><span class="badge bad">${f.label}</span></td>
+      <td class="col-conf mono t-right">${f.confidence ?? ""}</td>
+    `;
+
+    attackFlowBody.prepend(tr);
+    while (attackFlowBody.children.length > 250) attackFlowBody.removeChild(attackFlowBody.lastChild);
+  }
+
+
+  // =========================
+  // Socket events
+  // =========================
+  socket.on("connect", () => { dot.classList.remove("off"); conn.textContent = "Connected"; });
+  socket.on("disconnect", () => { dot.classList.add("off"); conn.textContent = "Disconnected"; });
+
+  socket.on("packet_event", (p) => { if (!pausePkts) addPacketRow(p); });
+
+  socket.on("flow_event", (f) => {
+    if (pauseFlows) return;
+
+    // ✅ log ONLY features into secondary table
+    addFeaturesRowToLog(f);
+
+    const tr = addFlowRow(f);
+
+    const isAttack = (f.label !== "BENIGN");
+    if (isAttack) attackCount++; else benignCount++;
+
+    pushMinute(isAttack);
+    bumpLabel(f.label);
+    refreshCharts();
+
+    if (isAttack){
+      if (tr) tr.classList.add("row-attack-flash");
+      showAlert(f);
+      addAttackFlowRow(f);
+    }
+  });
+
+  socket.on("alert_event", (a) => showAlert(a));
+
+  refreshCharts();
+</script>
+{% endblock %}

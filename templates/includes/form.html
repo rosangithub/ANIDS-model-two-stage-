@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<div class="form-container">
+    <h2>Packet Details</h2>
+    <p>Please fill in the following features:</p>
+    <form action="/predict" method="POST">
+        <div>
+            <label>Fwd Packet Length Max</label>
+            <input type="number" step="any" name="Fwd Packet Length Max" required>
+        </div>
+        <div>
+            <label>Fwd Packet Length Mean</label>
+            <input type="number" step="any" name="Fwd Packet Length Mean" required>
+        </div>
+        <div>
+            <label>Bwd Packets/s</label>
+            <input type="number" step="any" name="Bwd Packets/s" required>
+        </div>
+        <div>
+            <label>Total Length of Fwd Packets</label>
+            <input type="number" step="any" name="Total Length of Fwd Packets" required>
+        </div>
+        <div>
+            <label>Subflow Fwd Bytes</label>
+            <input type="number" step="any" name="Subflow Fwd Bytes" required>
+        </div>
+        <div>
+            <label>Flow Packets/s</label>
+            <input type="number" step="any" name="Flow Packets/s" required>
+        </div>
+        <div>
+            <label>Packet Length Std</label>
+            <input type="number" step="any" name="Packet Length Std" required>
+        </div>
+        <div>
+            <label>Flow IAT Mean</label>
+            <input type="number" step="any" name="Flow IAT Mean" required>
+        </div>
+        <div>
+            <label>Avg Fwd Segment Size</label>
+            <input type="number" step="any" name="Avg Fwd Segment Size" required>
+        </div>
+        <div>
+            <label>Flow IAT Max</label>
+            <input type="number" step="any" name="Flow IAT Max" required>
+        </div>
+        <div>
+            <label>Init_Win_bytes_backward</label>
+            <input type="number" step="any" name="Init_Win_bytes_backward" required>
+        </div>
+        <div>
+            <label>Avg Bwd Segment Size</label>
+            <input type="number" step="any" name="Avg Bwd Segment Size" required>
+        </div>
+        <div>
+            <label>Bwd Packet Length Mean</label>
+            <input type="number" step="any" name="Bwd Packet Length Mean" required>
+        </div>
+        <div>
+            <label>Flow Duration</label>
+            <input type="number" step="any" name="Flow Duration" required>
+        </div>
+        <div>
+            <label>Bwd Packet Length Std</label>
+            <input type="number" step="any" name="Bwd Packet Length Std" required>
+        </div>
+        <div>
+            <label>Bwd Packet Length Max</label>
+            <input type="number" step="any" name="Bwd Packet Length Max" required>
+        </div>
+        <div>
+            <label>Subflow Bwd Bytes</label>
+            <input type="number" step="any" name="Subflow Bwd Bytes" required>
+        </div>
+        <div>
+            <label>Total Length of Bwd Packets</label>
+            <input type="number" step="any" name="Total Length of Bwd Packets" required>
+        </div>
+        <div>
+            <label>Destination Port</label>
+            <input type="number" step="any" name="Destination Port" required>
+        </div>
+        <div>
+            <label>Packet Length Variance</label>
+            <input type="number" step="any" name="Packet Length Variance" required>
+        </div>
+
+        <div class="full-width button">
+            <button type="submit">Predict</button>
+        </div>
+
+        {% if result %}
+        <div class="result">
+            <h3>{{ result }}</h3>
+        </div>
+        {% endif %}
+    </form>
+</div>
+

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>About Us - Anomaly-Based Network Intrusion Detection System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/aboutus.css') }}">
+
+{% endblock head %}
+
+{% block content %}
+<section class="about-section">
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>🛡️ About Our Project</h1>
+        <p>
+            <strong>Anomaly-Based Network Intrusion Detection System Using Ensemble Machine Learning</strong> is a Machine Learning-powered 
+            solution designed to detect malicious network activities by identifying unusual traffic patterns. 
+            Using the <span class="dataset-badge">CICIDS2017 Dataset</span>, our system learns to classify 
+            both normal and attack behaviors, helping strengthen network defenses against cyber threats.
+        </p>
+    </div>
+
+    <!-- Objective & Tools Grid -->
+    <div class="content-grid">
+        <div class="content-card">
+            <h2><span class="icon">🎯</span> Project Objective</h2>
+            <p>
+                The main objective of this project is to develop an anomaly-based network intrusion detection 
+                system that can accurately identify malicious network activities by leveraging the power of ensemble 
+                machine learning techniques. The system aims to enhance the detection accuracy, minimize false positives, 
+                and adapt effectively to evolving cyber threats.
+            </p>
+            <br>
+            <p>
+                By integrating multiple machine learning algorithms such as Random Forest, Cat Boosting, Decision Tree, KNN, and Logistic Regression, 
+                the project seeks to combine the strengths of individual models to achieve a more robust and reliable
+                intrusion detection framework.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2><span class="icon">🛠️</span> Technologies & Tools</h2>
+            <ul>
+                <li>Python (Flask Framework)</li>
+                <li>Machine Learning: Scikit-learn</li>
+                <li>Data Processing: Pandas, NumPy</li>
+                <li>Dataset: CICIDS2017</li>
+                <li>Frontend: HTML, CSS, JavaScript</li>
+                <li>Visualization: Matplotlib, Seaborn</li>
+                <li>Charts: Chart.js</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Goals Section -->
+    <div class="goals-section">
+        <h2 class="goals-title">📊 Project Goals</h2>
+        <div class="goals-grid">
+            <div class="goal-card">
+                <div class="goal-icon">📈</div>
+                <div class="goal-content">
+                    <p>Analyze the CICIDS2017 dataset to extract meaningful features for distinguishing normal and attack traffic patterns.</p>
+                </div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🤖</div>
+                <div class="goal-content">
+                    <p>Build and evaluate ensemble-based models capable of detecting various network intrusions in real time.</p>
+                </div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">📊</div>
+                <div class="goal-content">
+                    <p>Provide a user-friendly web dashboard to visualize detection results and performance metrics.</p>
+                </div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-icon">🔒</div>
+                <div class="goal-content">
+                    <p>Contribute to cybersecurity by proposing a scalable and efficient approach to network threat detection using machine learning.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    
+<!-- Team Section -->
+<div class="team-section">
+    <h2 class="team-title">👥 Project Team</h2>
+
+    <div class="team-grid">
+        <!-- Rosan Shrestha -->
+        <div class="team-card">
+            <div class="team-avatar">RS</div>
+            <h3>Rosan Shrestha</h3>
+            <p class="roll">Roll No: 210144</p>
+            <p class="role">Machine Learning & Network Security Lead</p>
+            <p class="description">
+                Led the design and implementation of the anomaly-based network intrusion detection system.
+                Responsible for real-time network traffic capture and feature extraction using Scapy,
+                network-level analysis, ensemble machine learning model development, data preprocessing
+                using the CICIDS2017 dataset, model evaluation, and integration of real-time prediction
+                pipelines for accurate intrusion detection.
+            </p>
+        </div>
+
+        <!-- Saurav Sijapati -->
+        <div class="team-card">
+            <div class="team-avatar">SS</div>
+            <h3>Saurav Sijapati</h3>
+            <p class="roll">Roll No: 210129</p>
+            <p class="role">Backend & System Integration Engineer</p>
+            <p class="description">
+                Developed the backend architecture using Flask.
+                Responsible for database management, authentication, system security,
+                and seamless integration of the trained machine learning model with the backend
+                to enable real-time intrusion detection and result handling.
+            </p>
+        </div>
+
+        <!-- Alisha Malla -->
+        <div class="team-card">
+            <div class="team-avatar">AM</div>
+            <h3>Alisha Malla</h3>
+            <p class="roll">Roll No: 210137</p>
+            <p class="role">UI/UX & Data Visualization Designer</p>
+            <p class="description">
+                Designed an intuitive and user-friendly interface for the intrusion detection system.
+                Focused on UI/UX design principles, dashboard layouts, and visualization of network
+                traffic statistics and anomaly detection results to ensure clarity and usability.
+            </p>
+        </div>
+
+        <!-- Netrahari Pahadi -->
+        <div class="team-card">
+            <div class="team-avatar">NP</div>
+            <h3>Netrahari Pahadi</h3>
+            <p class="roll">Roll No: 210119</p>
+            <p class="role">Frontend & Interaction Developer</p>
+            <p class="description">
+                Implemented the responsive frontend using HTML, CSS, and JavaScript.
+                Responsible for interactive components, API integration with the backend,
+                responsive design across devices, and ensuring smooth user interaction
+                throughout the system.
+            </p>
+        </div>
+    </div>
+</div>
+
+        <!-- Supervisor Section -->
+        <div class="supervisor-section">
+            <h3>👨‍🏫 Supervisor</h3>
+            <p>
+                <strong>Ajaya Adhikari</strong><br>
+                Department of ICT<br>
+                Cosmos College of Management and Technology
+            </p>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

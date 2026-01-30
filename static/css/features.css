@@ -1,0 +1,27 @@
+.site-footer {
+  margin-top: auto;
+  width: 100%;
+
+  border-top: 1px solid rgba(148,163,184,.15);
+  background: rgba(2,6,23,.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.site-footer p {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.site-footer strong {
+  color: #e5e7eb;
+}

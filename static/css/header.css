@@ -1,0 +1,161 @@
+/* =========================================
+   SITE HEADER / NAVBAR
+   Layout-level CSS (DO NOT override in pages)
+========================================= */
+
+/* Header wrapper */
+.site-header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 80px;
+  background: #1f2937;
+  color: #ffffff;
+}
+
+/* 🔒 LOCK NAVBAR FONT */
+.site-header,
+.site-header *{
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* Inner layout */
+.header-inner{
+  height: 80px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* ===============================
+   BRAND
+================================ */
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-icon{
+  width: 32px;
+  height: 32px;
+  margin-top: -4px;
+}
+
+.brand-text{
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ===============================
+   DESKTOP NAVIGATION
+================================ */
+.nav-desktop{
+  display: block;
+}
+
+.nav-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link{
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover{
+  background: #374151;
+}
+
+/* Danger links (logout etc.) */
+.nav-link-danger,
+.mobile-link-danger{
+  color: #fca5a5;
+}
+
+/* ===============================
+   MOBILE MENU BUTTON
+================================ */
+.mobile-btn{
+  display: none;
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-btn:hover{
+  background: #374151;
+}
+
+.mobile-icon{
+  width: 24px;
+  height: 24px;
+  user-select: none;
+}
+
+/* ===============================
+   MOBILE NAVIGATION
+================================ */
+.nav-mobile{
+  display: none;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 80px);
+  background: #1f2937;
+}
+
+.mobile-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+}
+
+.mobile-link{
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 12px;
+  color: #ffffff;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.mobile-link:hover{
+  background: #374151;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px){
+  .nav-desktop{ display: none; }
+  .mobile-btn{ display: flex; }
+  .nav-mobile{ display: block; }
+}

@@ -1,0 +1,114 @@
+.landing-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 4rem 5%;
+  background-color: #141625;
+}
+
+.landing-feature-card {
+  background-color: #1a1c2b;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  width: 250px;
+  transition: 0.3s;
+}
+
+.landing-feature-card:hover { transform: translateY(-5px); }
+
+.landing-feature-card h3 {
+  margin-bottom: 1rem;
+  color: #58a6ff;
+}
+
+.landing-feature-card p {
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+/* =============================
+   HERO SECTION
+============================= */
+.hero{
+  position: relative;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #ffffff;
+  padding: 96px 24px;
+  background-image: url("https://media.istockphoto.com/id/2155202633/photo/businessman-holding-the-secure-network-connecting-icon-linking-business-and-data-with.jpg?s=612x612&w=0&k=20&c=OdPLmZ5mlz52yAs25VJIvM_g2NxJlUbQ-XI0ToVFL3g=");
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+.hero-overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(31, 41, 55, 0.45);
+}
+
+.hero-content{
+  position: relative;
+  max-width: 1100px;
+  padding: 0 16px;
+}
+
+.hero-title{
+  margin-bottom: 20px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+/* =============================
+   FEATURES / ARTICLE
+============================= */
+.home-article{
+  padding: 50px 20px;
+}
+
+.landing-features{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 4rem 5%;
+  background-color: #141625;
+  border-radius: 20px;
+}
+
+.landing-feature-card{
+  background-color: #1a1c2b;
+  padding: 2rem;
+  border-radius: 14px;
+  text-align: center;
+  width: 250px;
+  border: 1px solid rgba(148,163,184,.12);
+  transition: transform 0.3s ease;
+}
+
+.landing-feature-card:hover{
+  transform: translateY(-6px);
+}
+
+.landing-feature-card h3{
+  margin-bottom: 1rem;
+  color: #58a6ff;
+  font-weight: 800;
+}
+
+.landing-feature-card p{
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 768px){
+  .hero{ padding: 72px 16px; }
+  .landing-feature-card{
+    width: 100%;
+    max-width: 420px;
+  }
+}

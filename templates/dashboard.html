@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | ANIDS{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dashboard-container">
+
+    <h1 class="dashboard-title">🛡️ Network Intrusion Detection Dashboard</h1>
+
+    <!-- === Summary Stats === -->
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-number">{{ total_predictions }}</div>
+        <div class="stat-label">Total Records</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-number">{{ attack_count }}</div>
+        <div class="stat-label">Attacks Detected</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-number">{{ normal_count }}</div>
+        <div class="stat-label">Normal Traffic</div>
+      </div>
+
+      <!-- ✅ meaningful metric (no ground truth needed) -->
+      <div class="stat-box">
+        <div class="stat-number">{{ attack_rate }}%</div>
+        <div class="stat-label">Attack Rate</div>
+      </div>
+
+    </div>
+    <!-- === Charts Section === -->
+    {% if attack_counts %}
+    <div class="charts">
+
+      <!-- Chart 1: Attack types only -->
+      <div class="chart-card">
+        <h2>Attack Type Distribution</h2>
+        <div style="height:260px;">
+          <canvas id="attackChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Normal vs Attack Summary -->
+      <div class="chart-card">
+        <h2>Normal vs Attack Summary</h2>
+        <div style="height:260px;">
+          <canvas id="summaryChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: All categories (BENIGN + attack types) -->
+      <div class="chart-card">
+        <h2>All Traffic Categories</h2>
+        <div style="height:260px;">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+    {% endif %}
+
+    <!-- === Buttons === -->
+    <div class="actions">
+      <button class="button" onclick="window.location.href='/upload';">📤 Upload New Data</button>
+      <button class="button" onclick="window.location.href='/download_report';">📊 Download Report</button>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if attack_counts %}
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+
+    // ✅ All categories dict from backend (BENIGN + attack types)
+    const allCounts = {{ attack_counts|tojson }};
+
+    // ✅ Make attack-only counts by removing BENIGN
+    const attackOnlyCounts = Object.fromEntries(
+      Object.entries(allCounts).filter(([k, v]) => k !== "BENIGN")
+    );
+
+    const attackLabels = Object.keys(attackOnlyCounts);
+    const attackData   = Object.values(attackOnlyCounts);
+
+    const allLabels = Object.keys(allCounts);
+    const allData   = Object.values(allCounts);
+
+    const normalCount = {{ normal_count|int }};
+    const attackCount = {{ attack_count|int }};
+
+    // Global animation defaults
+    Chart.defaults.animation.duration = 1400;
+    Chart.defaults.animation.easing = "easeInOutQuart";
+
+    const bgColors = [
+      "#22d3ee", "#60a5fa", "#a78bfa", "#f87171",
+      "#facc15", "#4ade80", "#fb7185", "#94a3b8",
+      "#fb923c", "#34d399", "#818cf8", "#f472b6"
+    ];
+
+    const borderColors = [
+      "#0891b2", "#2563eb", "#7c3aed", "#dc2626",
+      "#ca8a04", "#16a34a", "#e11d48", "#475569",
+      "#ea580c", "#059669", "#4f46e5", "#db2777"
+    ];
+
+    const barBackground = attackLabels.map((_, i) => bgColors[i % bgColors.length]);
+    const barBorder     = attackLabels.map((_, i) => borderColors[i % borderColors.length]);
+
+    const allBackground = allLabels.map((_, i) => bgColors[i % bgColors.length]);
+   Chart.defaults.color = "#e5e7eb";
+   Chart.defaults.plugins.legend.labels.color = "#e5e7eb";
+   Chart.defaults.plugins.title.color = "#e5e7eb";
+
+    // ----- Chart 1: Attack Type Distribution -----
+    const attackCanvas = document.getElementById("attackChart");
+    if (attackCanvas && attackLabels.length > 0) {
+      new Chart(attackCanvas, {
+        type: "bar",
+        data: {
+          labels: attackLabels,
+          datasets: [{
+            label: "Attack Count",
+            data: attackData,
+            backgroundColor: barBackground,
+            borderColor: barBorder,
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            title: { display: true, text: "Attack Type Distribution" }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: "Attack Type" },
+              ticks: { maxRotation: 45, minRotation: 0 }
+            },
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Count" }
+            }
+          }
+        }
+      });
+    }
+
+    // ----- Chart 2: Normal vs Attack Summary -----
+    const summaryCanvas = document.getElementById("summaryChart");
+    if (summaryCanvas) {
+      new Chart(summaryCanvas, {
+        type: "bar",
+        data: {
+          labels: ["Normal", "Attack"],
+          datasets: [{
+            label: "Count",
+            data: [normalCount, attackCount],
+            backgroundColor: ["#22c55e", "#ef4444"],
+            borderColor: ["#16a34a", "#dc2626"],
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            title: { display: true, text: "Normal vs Attack Summary" }
+          },
+          scales: {
+            x: { title: { display: true, text: "Class" } },
+            y: { beginAtZero: true, title: { display: true, text: "Count" } }
+          }
+        }
+      });
+    }
+
+    // ----- Chart 3: All Traffic Categories -----
+    const categoryCanvas = document.getElementById("categoryChart");
+    if (categoryCanvas && allLabels.length > 0) {
+      new Chart(categoryCanvas, {
+        type: "doughnut",
+        data: {
+          labels: allLabels,
+          datasets: [{
+            label: "Traffic",
+            data: allData,
+            backgroundColor: allBackground,
+            borderColor: "rgba(15,23,42,1)",
+            borderWidth: 2,
+            hoverOffset: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "62%",
+          plugins: {
+            legend: { position: "bottom" },
+            title: { display: true, text: "All Traffic Categories" }
+          }
+        }
+      });
+    }
+
+  });
+</script>
+{% endif %}
+{% endblock scripts %}

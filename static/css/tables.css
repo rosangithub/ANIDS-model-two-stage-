@@ -1,0 +1,28 @@
+/* -------------------------------
+   PREDICTION TABLE
+--------------------------------*/
+.result { margin-top: 2.5rem; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #1e293b;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  color: #f8fafc;
+}
+
+table thead {
+  background: linear-gradient(to right, #06b6d4, #3b82f6);
+  color: white;
+}
+
+table th, table td {
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+table tbody tr:nth-child(even) { background-color: #334155; }
+table tbody tr:hover { background-color: #475569; }

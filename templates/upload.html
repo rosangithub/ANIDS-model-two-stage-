@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload | ANIDS{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/upload.css') }}">
+{% endblock head %}
+
+{% block content %}
+<div class="upload-page">
+  <div class="upload-container">
+
+    <div class="upload-header">
+      <h1>🛡️ Network Intrusion Detection System</h1>
+      <p class="upload-subtitle">Upload and analyze network traffic data for anomaly detection</p>
+    </div>
+
+    {% if error %}
+      <p class="upload-error">⚠️ {{ error }}</p>
+    {% endif %}
+
+    <div class="upload-main">
+      <!-- Upload Card -->
+      <div class="upload-form-card">
+        <div class="upload-icon">📁</div>
+        <h2 class="upload-form-title">Upload CSV File</h2>
+        <p class="upload-form-desc">Select a CSV file containing network traffic data for prediction</p>
+
+        <form class="upload-form" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file" accept=".csv" required>
+          <button class="upload-btn" type="submit">🔍 Analyze Data</button>
+        </form>
+      </div>
+
+      <!-- Stats -->
+      <div class="upload-stats">
+        <div class="upload-stat-card">
+          <div class="upload-stat-icon">📊</div>
+          <div class="upload-stat-content">
+            <h3>Supported Format</h3>
+            <p>CSV Files</p>
+          </div>
+        </div>
+
+        <div class="upload-stat-card">
+          <div class="upload-stat-icon">🎯</div>
+          <div class="upload-stat-content">
+            <h3>Detection Accuracy</h3>
+            <p>High Precision</p>
+          </div>
+        </div>
+
+        <div class="upload-stat-card">
+          <div class="upload-stat-icon">🔒</div>
+          <div class="upload-stat-content">
+            <h3>Security</h3>
+            <p>ML-Powered</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if predictions %}
+    <div class="upload-result">
+      <div class="upload-table-head">
+        <h2>📋 Prediction Results</h2>
+        <span class="upload-badge">{{ predictions|length }} Records</span>
+      </div>
+
+      <table class="upload-table">
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Class Index</th>
+            <th>Class Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in predictions %}
+          <tr>
+            <td>{{ item.sr_no }}</td>
+            <td>{{ item.class_index }}</td>
+            <td>{{ item.class_name }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    {% if attack_counts or plot_url %}
+    <div class="upload-charts">
+
+      {% if attack_counts %}
+      <div class="upload-chart-card">
+        <h2>Attack Type Distribution</h2>
+        <canvas id="attackChart"></canvas>
+      </div>
+      {% endif %}
+
+      {% if plot_url %}
+      <div class="upload-chart-card">
+        <h3>Prediction Distribution</h3>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Prediction Chart">
+      </div>
+      {% endif %}
+
+    </div>
+    {% endif %}
+
+    <div class="upload-actions">
+      <button class="upload-btn" onclick="window.location.href='/dashboard';">View Dashboard</button>
+      <button class="upload-btn" onclick="window.location.href='/download_report';">Download Report</button>
+    </div>
+
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{% if attack_counts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ attack_counts.keys()|list|safe }};
+  const values = {{ attack_counts.values()|list|safe }};
+
+  const palette = [
+    'rgba(16,185,129,.85)',
+    'rgba(59,130,246,.85)',
+    'rgba(245,158,11,.85)',
+    'rgba(239,68,68,.85)',
+    'rgba(139,92,246,.85)',
+    'rgba(34,211,238,.85)',
+    'rgba(244,114,182,.85)',
+    'rgba(52,211,153,.85)',
+    'rgba(251,146,60,.85)',
+    'rgba(167,139,250,.85)'
+  ];
+
+  const bg = labels.map((_, i) => palette[i % palette.length]);
+
+  new Chart(document.getElementById('attackChart'), {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: bg,
+        borderColor: '#0f172a',
+        borderWidth: 3,
+        hoverOffset: 14
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,  // ✅ matches CSS fixed height
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#e2e8f0',
+            padding: 14,
+            usePointStyle: true
+          }
+        }
+      },
+      cutout: '62%'
+    }
+  });
+</script>
+{% endif %}
+{% endblock scripts %}

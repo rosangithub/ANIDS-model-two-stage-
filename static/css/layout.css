@@ -1,0 +1,28 @@
+/* General page container */
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 18px 14px;
+}
+
+/* Your centered card container used in many pages */
+.container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 2rem;
+  background: rgba(30, 41, 59, 0.97);
+  border-radius: 22px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.titleBlip { animation: fadeIn 1s; }

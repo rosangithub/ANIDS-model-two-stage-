@@ -1,0 +1,16 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>
+      © <span id="year"></span>
+      <strong>Anomaly-Based NIDS</strong>
+      · Cosmos College of Management and Technology
+    </p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var el = document.getElementById("year");
+    if (el) el.textContent = new Date().getFullYear();
+  })();
+</script>

@@ -1,0 +1,301 @@
+/* ==============================
+   REALTIME DASHBOARD (FINAL)
+   ============================== */
+
+.rt-dashboard{
+  --c-time: 110px;
+  --c-ip:   230px;
+  --c-port: 85px;
+  --c-proto:90px;
+  --c-label:160px;
+  --c-conf: 90px;
+  --c-len:  70px;
+  --c-flag: 140px;
+}
+
+/* ---------- WRAPPER ---------- */
+.rt-dashboard .wrap{
+  max-width: 1450px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+/* ---------- HEADER ---------- */
+.rt-dashboard .header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:16px;
+}
+.rt-dashboard .title{
+  font-size:1.7rem;
+  font-weight:900;
+  margin:0;
+  color:#e5e7eb;
+}
+.rt-dashboard .subtitle{
+  margin:4px 0 0;
+  color:#94a3b8;
+  font-weight:600;
+  font-size:.95rem;
+}
+.rt-dashboard .mini-status{
+  margin-top:6px;
+  color:#cbd5f5;
+  font-weight:800;
+  font-size:.9rem;
+}
+
+/* ---------- STATUS ---------- */
+.rt-dashboard .pill{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  background:rgba(2,6,23,.75);
+  border:1px solid rgba(148,163,184,.25);
+  border-radius:999px;
+  font-weight:900;
+}
+.rt-dashboard .dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 4px rgba(34,197,94,.18);
+}
+.rt-dashboard .dot.off{
+  background:#f87171;
+  box-shadow:0 0 0 4px rgba(248,113,113,.18);
+}
+.rt-dashboard #counts{
+  color:#94a3b8;
+  font-weight:900;
+}
+
+/* ---------- GRID ---------- */
+.rt-dashboard .grid{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:16px;
+}
+@media (max-width:1100px){
+  .rt-dashboard .grid{ grid-template-columns:1fr; }
+  .rt-dashboard .header{ flex-direction:column; }
+}
+
+.rt-dashboard .split{
+  display:grid;
+  grid-template-rows:auto auto; /* allow cards to grow */
+  gap:16px;
+}
+
+
+@media (max-width:1100px){
+  .rt-dashboard .split{ grid-template-rows:auto; }
+}
+
+/* ---------- CARDS ---------- */
+.rt-dashboard .card{
+  background:rgba(30,41,59,.95);
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,.45);
+  overflow:hidden;
+}
+.rt-dashboard .card-h{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(148,163,184,.15);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.rt-dashboard .card-h h3{
+  margin:0;
+  font-size:1.05rem;
+  font-weight:900;
+  color:#f1f5f9;
+}
+.rt-dashboard .card-b{
+  padding:14px 16px;
+}
+
+/* ---------- CONTROLS ---------- */
+.rt-dashboard .controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.rt-dashboard .btn{
+  padding:8px 14px;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,.22);
+  background:rgba(2,6,23,.65);
+  color:#e5e7eb;
+  font-weight:900;
+  cursor:pointer;
+}
+.rt-dashboard .btn:hover{
+  background:rgba(2,6,23,.9);
+}
+.rt-dashboard .btn-danger{
+  background:rgba(239,68,68,.15);
+  border-color:rgba(239,68,68,.35);
+  color:#fecaca;
+}
+
+/* ---------- TABLE (PERFECT) ---------- */
+.rt-dashboard .table-wrap{
+  background:rgba(2,6,23,.55);
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,.14);
+  overflow:hidden;
+}
+
+/* horizontal scroll */
+.rt-dashboard .table-x{
+  overflow-x:auto;
+}
+
+/* vertical scroll */
+.rt-dashboard .table-y{
+  max-height:260px;
+  overflow-y:auto;
+}
+.rt-dashboard .flows .table-y{
+  max-height:340px;
+}
+
+/* IMPORTANT: normal table layout */
+.rt-dashboard table.stream{
+  border-collapse:collapse;
+  table-layout:fixed;
+  min-width:100%;
+  width:max-content;
+}
+
+.rt-dashboard table.stream th,
+.rt-dashboard table.stream td{
+  padding:9px 10px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.rt-dashboard table.stream thead th{
+  position:sticky;
+  top:0;
+  background:rgba(2,6,23,.95);
+  color:#e2e8f0;
+  font-size:.78rem;
+  font-weight:900;
+  border-bottom:1px solid rgba(148,163,184,.25);
+  z-index:2;
+}
+
+.rt-dashboard table.stream tbody tr:hover{
+  background:rgba(96,165,250,.12);
+}
+
+/* ---------- COLUMNS ---------- */
+.rt-dashboard .col-time{ width:var(--c-time); }
+.rt-dashboard .col-src{ width:var(--c-ip); }
+.rt-dashboard .col-dst{ width:var(--c-ip); }
+.rt-dashboard .col-sport{ width:var(--c-port); }
+.rt-dashboard .col-dport{ width:var(--c-port); }
+.rt-dashboard .col-proto{ width:var(--c-proto); }
+.rt-dashboard .col-label{ width:var(--c-label); }
+.rt-dashboard .col-conf{ width:var(--c-conf); text-align:right; }
+.rt-dashboard .col-len{ width:var(--c-len); }
+.rt-dashboard .col-flag{ width:var(--c-flag); }
+
+/* ---------- BADGES ---------- */
+.rt-dashboard .badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:.75rem;
+}
+.rt-dashboard .ok{ background:rgba(34,197,94,.2); color:#86efac; }
+.rt-dashboard .bad{ background:rgba(239,68,68,.2); color:#fecaca; }
+
+/* ---------- CHARTS ---------- */
+.rt-dashboard .charts{ display:grid; gap:14px; }
+.rt-dashboard .chart-wrap{
+  background:rgba(2,6,23,.6);
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:14px;
+  padding:12px;
+}
+/* ---------- CHARTS (better size) ---------- */
+.rt-dashboard .chart-wrap canvas{
+  width: 100% !important;
+  height: 220px !important;   /* ✅ bigger */
+}
+
+/* make charts slightly smaller on phones */
+@media (max-width: 768px){
+  .rt-dashboard .chart-wrap canvas{
+    height: 180px !important;
+  }
+}
+
+
+/* ---------- FEATURE ---------- */
+.rt-dashboard .feature-wrap{
+  margin-top:14px;
+  max-height:340px;
+  overflow:auto;
+  background:rgba(2,6,23,.6);
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,.14);
+}
+.rt-dashboard table.feat{
+  width:100%;
+  border-collapse:collapse;
+}
+.rt-dashboard table.feat th{
+  position:sticky;
+  top:0;
+  background:rgba(2,6,23,.95);
+  font-weight:900;
+}
+
+/* ---------- ALERT ---------- */
+.rt-dashboard .alertbar{
+  display:none;
+  margin:14px 0;
+  padding:12px 14px;
+  border-radius:16px;
+  background:rgba(239,68,68,.18);
+  border:1px solid rgba(239,68,68,.45);
+  color:#fecaca;
+  font-weight:900;
+}
+
+/* ---------- MONO ---------- */
+.rt-dashboard .mono{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+/* ============================
+   FIX: allow Flow card to contain more content with scrolling
+   ============================ */
+
+/* Let grid children shrink properly */
+.rt-dashboard .card{
+  min-height: 0;
+}
+
+/* Make the Flow card body scroll (so toggle + extra tables appear) */
+.rt-dashboard .flow-card .card-b{
+  max-height: 100%;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Optional: increase internal scroll area */
+.rt-dashboard .flow-card .card-b{
+  max-height: calc(100vh - 260px); /* adjust if needed */
+}
