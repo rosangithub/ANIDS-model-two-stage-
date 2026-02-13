@@ -42,11 +42,11 @@ Thumbs.db
 # ==============================
 # Machine Learning Artifacts
 # ==============================
-# *.joblib
-# *.pkl
-# *.cbm        # CatBoost models
+*.joblib
+*.pkl
+*.cbm        # CatBoost models
 
-# ==============================
+# =============================
 # Data (large / raw datasets)
 # ==============================
 data/
